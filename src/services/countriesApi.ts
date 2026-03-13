@@ -4,7 +4,9 @@ const BASE_URL = "https://restcountries.com/v3.1"
 
 export async function getAllCountries(): Promise<Country[]> {
   try {
-    const response = await fetch(`${BASE_URL}/all`)
+    const response = await fetch(
+  `${BASE_URL}/all?fields=name,flags,population,region,capital`
+)
 
     if (!response.ok) {
       throw new Error("Failed to fetch countries")
