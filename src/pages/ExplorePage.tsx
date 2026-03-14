@@ -3,6 +3,8 @@ import type { Country } from "../types/country"
 import { getAllCountries } from "../services/countriesApi"
 import { CountryList } from "../components/Container/CountryList/CountryList"
 import { SearchBar } from "../components/SearchBar/SearchBar"
+import { RegionFilter } from "../components/RegionFilter/RegionFilter"
+import PopulationFilter from "../components/PopulationFilter/PopulationFilter"
 
 export function ExplorePage() {
 
@@ -12,6 +14,33 @@ export function ExplorePage() {
 
   const [searchQuery, setSearchQuery] = useState("")
   const [debouncedQuery, setDebouncedQuery] = useState("")
+
+  const [region, setRegion] = useState("")
+  const [populationSort, setPopulationSort] = useState("")
+
+  let filteredCountries = countries.filter(country =>
+  country.name.common
+    .toLowerCase()
+    .includes(debouncedQuery.toLowerCase())
+)
+
+if (region) {
+  filteredCountries = filteredCountries.filter(
+    country => country.region === region
+  )
+}
+
+if (populationSort === "asc") {
+  filteredCountries = [...filteredCountries].sort(
+    (a, b) => a.population - b.population
+  )
+}
+
+if (populationSort === "desc") {
+  filteredCountries = [...filteredCountries].sort(
+    (a, b) => b.population - a.population
+  )
+}
 
   // API load
   useEffect(() => {
@@ -38,13 +67,6 @@ export function ExplorePage() {
     return () => clearTimeout(timer)
   }, [searchQuery])
 
-  // filtering
-  const filteredCountries = countries.filter(country =>
-    country.name.common
-      .toLowerCase()
-      .includes(debouncedQuery.toLowerCase())
-  )
-
   if (loading) {
     return <p>Loading countries...</p>
   }
@@ -62,6 +84,16 @@ export function ExplorePage() {
         value={searchQuery}
         onChange={setSearchQuery}
       />
+      
+      <RegionFilter
+    value={region}
+    onChange={setRegion}
+  />
+
+  <PopulationFilter
+    value={populationSort}
+    onChange={setPopulationSort}
+  />
 
       <CountryList countries={filteredCountries} />
 
