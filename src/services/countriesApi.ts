@@ -5,8 +5,8 @@ const BASE_URL = "https://restcountries.com/v3.1"
 export async function getAllCountries(): Promise<Country[]> {
   try {
     const response = await fetch(
-  `${BASE_URL}/all?fields=name,flags,population,region,capital`
-)
+      `${BASE_URL}/all?fields=name,flags,population,region,capital`
+    )
 
     if (!response.ok) {
       throw new Error("Failed to fetch countries")
@@ -23,7 +23,11 @@ export async function getAllCountries(): Promise<Country[]> {
 
 export async function getCountryByName(name: string): Promise<Country[]> {
   try {
-    const response = await fetch(`${BASE_URL}/name/${name}`)
+    const encodedName = encodeURIComponent(name)
+
+    const response = await fetch(
+      `${BASE_URL}/name/${encodedName}?fields=name,flags,population,region,capital`
+    )
 
     if (!response.ok) {
       throw new Error("Country not found")
