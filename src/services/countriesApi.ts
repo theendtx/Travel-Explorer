@@ -26,7 +26,7 @@ export async function getCountryByName(name: string): Promise<Country[]> {
     const encodedName = encodeURIComponent(name)
 
     const response = await fetch(
-      `${BASE_URL}/name/${encodedName}?fields=name,flags,population,region,capital`
+      `${BASE_URL}/name/${encodedName}?fields=name,flags,population,region,capital,languages`
     )
 
     if (!response.ok) {

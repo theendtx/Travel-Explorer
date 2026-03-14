@@ -8,4 +8,7 @@ export type Country = {
     flags: {
         png: string
     }
+    languages?: {
+        [key: string]: string
+    }
 }
