@@ -2,12 +2,18 @@ import { useEffect, useState } from "react"
 import type { Country } from "../types/country"
 import { getAllCountries } from "../services/countriesApi"
 import { CountryList } from "../components/Container/CountryList/CountryList"
+import { SearchBar } from "../components/SearchBar/SearchBar"
 
 export function ExplorePage() {
+
   const [countries, setCountries] = useState<Country[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
+  const [searchQuery, setSearchQuery] = useState("")
+  const [debouncedQuery, setDebouncedQuery] = useState("")
+
+  // API load
   useEffect(() => {
     async function loadCountries() {
       try {
@@ -23,6 +29,22 @@ export function ExplorePage() {
     loadCountries()
   }, [])
 
+  // debounce
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedQuery(searchQuery)
+    }, 500)
+
+    return () => clearTimeout(timer)
+  }, [searchQuery])
+
+  // filtering
+  const filteredCountries = countries.filter(country =>
+    country.name.common
+      .toLowerCase()
+      .includes(debouncedQuery.toLowerCase())
+  )
+
   if (loading) {
     return <p>Loading countries...</p>
   }
@@ -33,8 +55,16 @@ export function ExplorePage() {
 
   return (
     <div>
+
       <h1>Explore Countries</h1>
-      <CountryList countries={countries} />
+
+      <SearchBar
+        value={searchQuery}
+        onChange={setSearchQuery}
+      />
+
+      <CountryList countries={filteredCountries} />
+
     </div>
   )
 }
