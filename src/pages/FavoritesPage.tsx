@@ -9,6 +9,7 @@ type Props = {
 }
 
 export function FavoritesPage({ favorites, toggleFavorite }: Props) {
+  
   const [countries, setCountries] = useState<Country[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -34,6 +35,7 @@ export function FavoritesPage({ favorites, toggleFavorite }: Props) {
 
   if (loading) return <p>Loading favorites...</p>
   if (error) return <p>{error}</p>
+  if (favoriteCountries.length === 0) return <p>No favorites yet</p>
 
   return (
     <div>
