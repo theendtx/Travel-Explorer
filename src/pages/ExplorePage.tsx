@@ -5,6 +5,7 @@ import { CountryList } from "../components/Container/CountryList/CountryList"
 import { SearchBar } from "../components/SearchBar/SearchBar"
 import { RegionFilter } from "../components/RegionFilter/RegionFilter"
 import { PopulationFilter } from "../components/PopulationFilter/PopulationFilter"
+import { useDebounce } from "../hooks/useDebounce"
 
 type Props = {
   favorites: string[]
@@ -16,9 +17,9 @@ export function ExplorePage({ favorites, toggleFavorite }: Props) {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [searchQuery, setSearchQuery] = useState<string>("")
-  const [debouncedQuery, setDebouncedQuery] = useState<string>("")
   const [region, setRegion] = useState<string>("")
   const [populationSort, setPopulationSort] = useState<string>("")
+  const debouncedQuery = useDebounce(searchQuery, 300)
 
   useEffect(() => {
     async function loadCountries() {
@@ -35,13 +36,6 @@ export function ExplorePage({ favorites, toggleFavorite }: Props) {
     loadCountries()
   }, [])
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setDebouncedQuery(searchQuery)
-    }, 350)
-
-    return () => clearTimeout(timer)
-  }, [searchQuery])
 
   let filteredCountries = countries.filter((country) =>
     country.name.common.toLowerCase().includes(debouncedQuery.toLowerCase())
@@ -71,7 +65,6 @@ export function ExplorePage({ favorites, toggleFavorite }: Props) {
   return (
     <div className="page">
       <section className="page-heading">
-        <span className="eyebrow">Block 16</span>
         <h1>Explore countries with a layout that scales beautifully.</h1>
         <p>
           Search fast, filter by region, sort population, and keep favorite places

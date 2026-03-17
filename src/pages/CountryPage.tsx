@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import { useParams, Link } from "react-router-dom"
 import type { Country } from "../types/country"
 import { getCountryByName } from "../services/countriesApi"
+import { formatPopulation } from "../utils/format"
 
 type Props = {
   favorites: string[]
@@ -93,7 +94,7 @@ export function CountryPage({ favorites, toggleFavorite }: Props) {
 
             <div className="country-meta-item">
               <span>Population</span>
-              <strong>{country.population.toLocaleString()}</strong>
+              <strong>{formatPopulation(country.population)}</strong>
             </div>
 
             <div className="country-meta-item">
