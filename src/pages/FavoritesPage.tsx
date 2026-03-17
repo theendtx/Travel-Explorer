@@ -9,7 +9,6 @@ type Props = {
 }
 
 export function FavoritesPage({ favorites, toggleFavorite }: Props) {
-  
   const [countries, setCountries] = useState<Country[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -33,16 +32,25 @@ export function FavoritesPage({ favorites, toggleFavorite }: Props) {
     favorites.includes(country.name.common)
   )
 
-  if (loading) return <p>Loading favorites...</p>
-  if (error) return <p>{error}</p>
-  if (favoriteCountries.length === 0) return <p>No favorites yet</p>
+  if (loading) return <div className="status-message">Loading favorites...</div>
+  if (error) return <div className="status-message">{error}</div>
 
   return (
-    <div>
-      <h1>Favorite Countries</h1>
+    <div className="page">
+      <section className="page-heading">
+        <span className="eyebrow">Saved List</span>
+        <h1>Your favorite destinations, ready for the next plan.</h1>
+        <p>
+          Keep a shortlist of countries you want to revisit, compare, or turn into
+          full trip plans later.
+        </p>
+      </section>
 
-      {favorites.length === 0 ? (
-        <p>No favorites yet</p>
+      {favoriteCountries.length === 0 ? (
+        <div className="empty-state">
+          <h2>No favorites yet</h2>
+          <p>Tap the star on any country card and it will appear here.</p>
+        </div>
       ) : (
         <CountryList
           countries={favoriteCountries}

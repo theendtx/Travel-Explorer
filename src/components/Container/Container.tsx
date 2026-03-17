@@ -1,15 +1,9 @@
+import type { ReactNode } from "react"
+
 type Props = {
-  children: React.ReactNode;
+  children: ReactNode
 }
 
 export function Container({ children }: Props) {
-  return (
-    <div style={{
-      maxWidth: '1200px',
-      margin: '0 auto',
-      padding: '20px',
-    }}>
-      {children}
-    </div>
-  );
+  return <div className="container">{children}</div>
 }

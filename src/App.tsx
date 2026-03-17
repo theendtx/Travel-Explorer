@@ -10,6 +10,7 @@ import { TripsPage } from "./pages/TripsPage"
 import { CountryPage } from "./pages/CountryPage"
 
 import type { Trip } from "./types/trip"
+import "./index.css"
 
 function App() {
   const [trips, setTrips] = useState<Trip[]>(() => {

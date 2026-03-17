@@ -1,5 +1,6 @@
 import type { Country } from "../../../types/country"
 import { CountryCard } from "../CountryCard/CountryCard"
+
 type Props = {
   countries: Country[]
   favorites: string[]
@@ -11,15 +12,8 @@ export function CountryList({
   favorites,
   toggleFavorite
 }: Props) {
-
   return (
-    <div
-      style={{
-        display: "grid",
-        gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
-        gap: "20px"
-      }}
-    >
+    <div className="country-grid">
       {countries.map((country) => (
         <CountryCard
           key={country.name.common}

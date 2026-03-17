@@ -5,7 +5,10 @@ export function Header() {
   return (
     <header className="header">
       <div className="header-container">
-        <div className="logo">🌍 Travel Explorer</div>
+        <div className="logo">
+          <strong>Travel Explorer</strong>
+          <span>Plan stylish routes across the world</span>
+        </div>
 
         <nav className="nav">
           <NavLink to="/">Home</NavLink>

@@ -21,21 +21,32 @@ export function CountryCard({
       className="country-card"
       style={{ textDecoration: "none", color: "inherit" }}
     >
-      <img src={country.flags.png} alt={name} />
+      <div className="country-card__media">
+        <img className="country-card__image" src={country.flags.png} alt={name} />
+      </div>
 
-      <h3>{name}</h3>
+      <div className="country-card__content">
+        <h3>{name}</h3>
 
-      <p>Population: {country.population.toLocaleString()}</p>
+        <div className="country-card__meta">
+          <span>{country.region}</span>
+          <span>{country.population.toLocaleString()}</span>
+        </div>
 
-      <button
-        className="favorite-button"
-        onClick={(e) => {
-          e.preventDefault()
-          onToggleFavorite(name)
-        }}
-      >
-        {isFavorite ? "★" : "☆"}
-      </button>
+        <div className="country-card__footer">
+          <span>Open details</span>
+
+          <button
+            className={`favorite-button ${isFavorite ? "active" : ""}`}
+            onClick={(e) => {
+              e.preventDefault()
+              onToggleFavorite(name)
+            }}
+          >
+            {isFavorite ? "★" : "☆"}
+          </button>
+        </div>
+      </div>
     </Link>
   )
 }

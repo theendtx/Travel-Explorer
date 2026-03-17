@@ -6,9 +6,9 @@ type Props = {
 export function PopulationFilter({ value, onChange }: Props) {
   return (
     <select
+      className="filter-select"
       value={value}
       onChange={(e) => onChange(e.target.value)}
-      style={{ padding: "10px" }}
     >
       <option value="">Sort by population</option>
       <option value="asc">Lowest first</option>

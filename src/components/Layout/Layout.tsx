@@ -5,14 +5,18 @@ import { Container } from "../Container/Container"
 
 export function Layout() {
   return (
-    <>
+    <div className="app-shell">
       <Header />
 
-      <Container>
-        <Outlet />
-      </Container>
+      <main className="page-shell">
+        <Container>
+          <div className="page-transition">
+            <Outlet />
+          </div>
+        </Container>
+      </main>
 
       <Footer />
-    </>
+    </div>
   )
 }

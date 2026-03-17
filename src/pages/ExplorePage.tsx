@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react"
-
 import type { Country } from "../types/country"
 import { getAllCountries } from "../services/countriesApi"
-
 import { CountryList } from "../components/Container/CountryList/CountryList"
 import { SearchBar } from "../components/SearchBar/SearchBar"
 import { RegionFilter } from "../components/RegionFilter/RegionFilter"
@@ -14,14 +12,11 @@ type Props = {
 }
 
 export function ExplorePage({ favorites, toggleFavorite }: Props) {
-
   const [countries, setCountries] = useState<Country[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-
   const [searchQuery, setSearchQuery] = useState("")
   const [debouncedQuery, setDebouncedQuery] = useState("")
-
   const [region, setRegion] = useState("")
   const [populationSort, setPopulationSort] = useState("")
 
@@ -43,15 +38,13 @@ export function ExplorePage({ favorites, toggleFavorite }: Props) {
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedQuery(searchQuery)
-    }, 500)
+    }, 350)
 
     return () => clearTimeout(timer)
   }, [searchQuery])
 
   let filteredCountries = countries.filter((country) =>
-    country.name.common
-      .toLowerCase()
-      .includes(debouncedQuery.toLowerCase())
+    country.name.common.toLowerCase().includes(debouncedQuery.toLowerCase())
   )
 
   if (region) {
@@ -72,39 +65,31 @@ export function ExplorePage({ favorites, toggleFavorite }: Props) {
     )
   }
 
-  if (loading) return <p>Loading countries...</p>
-  if (error) return <p>{error}</p>
+  if (loading) return <div className="status-message">Loading countries...</div>
+  if (error) return <div className="status-message">{error}</div>
 
   return (
-    <div>
+    <div className="page">
+      <section className="page-heading">
+        <span className="eyebrow">Block 16</span>
+        <h1>Explore countries with a layout that scales beautifully.</h1>
+        <p>
+          Search fast, filter by region, sort population, and keep favorite places
+          close while the grid stays balanced across devices.
+        </p>
+      </section>
 
-      <h1>Explore Countries</h1>
-
-      <SearchBar
-        value={searchQuery}
-        onChange={setSearchQuery}
-      />
-
-      <div style={{ marginBottom: "20px" }}>
-
-        <RegionFilter
-          value={region}
-          onChange={setRegion}
-        />
-
-        <PopulationFilter
-          value={populationSort}
-          onChange={setPopulationSort}
-        />
-
-      </div>
+      <section className="filters-bar">
+        <SearchBar value={searchQuery} onChange={setSearchQuery} />
+        <RegionFilter value={region} onChange={setRegion} />
+        <PopulationFilter value={populationSort} onChange={setPopulationSort} />
+      </section>
 
       <CountryList
         countries={filteredCountries}
         favorites={favorites}
         toggleFavorite={toggleFavorite}
       />
-
     </div>
   )
 }
