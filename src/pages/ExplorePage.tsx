@@ -1,12 +1,19 @@
 import { useEffect, useState } from "react"
+
 import type { Country } from "../types/country"
 import { getAllCountries } from "../services/countriesApi"
+
 import { CountryList } from "../components/Container/CountryList/CountryList"
 import { SearchBar } from "../components/SearchBar/SearchBar"
 import { RegionFilter } from "../components/RegionFilter/RegionFilter"
-import PopulationFilter from "../components/PopulationFilter/PopulationFilter"
+import { PopulationFilter } from "../components/PopulationFilter/PopulationFilter"
 
-export function ExplorePage() {
+type Props = {
+  favorites: string[]
+  toggleFavorite: (name: string) => void
+}
+
+export function ExplorePage({ favorites, toggleFavorite }: Props) {
 
   const [countries, setCountries] = useState<Country[]>([])
   const [loading, setLoading] = useState(true)
@@ -18,37 +25,12 @@ export function ExplorePage() {
   const [region, setRegion] = useState("")
   const [populationSort, setPopulationSort] = useState("")
 
-  let filteredCountries = countries.filter(country =>
-  country.name.common
-    .toLowerCase()
-    .includes(debouncedQuery.toLowerCase())
-)
-
-if (region) {
-  filteredCountries = filteredCountries.filter(
-    country => country.region === region
-  )
-}
-
-if (populationSort === "asc") {
-  filteredCountries = [...filteredCountries].sort(
-    (a, b) => a.population - b.population
-  )
-}
-
-if (populationSort === "desc") {
-  filteredCountries = [...filteredCountries].sort(
-    (a, b) => b.population - a.population
-  )
-}
-
-  // API load
   useEffect(() => {
     async function loadCountries() {
       try {
         const data = await getAllCountries()
         setCountries(data)
-      } catch (err) {
+      } catch {
         setError("Failed to load countries")
       } finally {
         setLoading(false)
@@ -58,7 +40,6 @@ if (populationSort === "desc") {
     loadCountries()
   }, [])
 
-  // debounce
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedQuery(searchQuery)
@@ -67,13 +48,32 @@ if (populationSort === "desc") {
     return () => clearTimeout(timer)
   }, [searchQuery])
 
-  if (loading) {
-    return <p>Loading countries...</p>
+  let filteredCountries = countries.filter((country) =>
+    country.name.common
+      .toLowerCase()
+      .includes(debouncedQuery.toLowerCase())
+  )
+
+  if (region) {
+    filteredCountries = filteredCountries.filter(
+      (country) => country.region === region
+    )
   }
 
-  if (error) {
-    return <p>{error}</p>
+  if (populationSort === "asc") {
+    filteredCountries = [...filteredCountries].sort(
+      (a, b) => a.population - b.population
+    )
   }
+
+  if (populationSort === "desc") {
+    filteredCountries = [...filteredCountries].sort(
+      (a, b) => b.population - a.population
+    )
+  }
+
+  if (loading) return <p>Loading countries...</p>
+  if (error) return <p>{error}</p>
 
   return (
     <div>
@@ -84,18 +84,26 @@ if (populationSort === "desc") {
         value={searchQuery}
         onChange={setSearchQuery}
       />
-      
-      <RegionFilter
-    value={region}
-    onChange={setRegion}
-  />
 
-  <PopulationFilter
-    value={populationSort}
-    onChange={setPopulationSort}
-  />
+      <div style={{ marginBottom: "20px" }}>
 
-      <CountryList countries={filteredCountries} />
+        <RegionFilter
+          value={region}
+          onChange={setRegion}
+        />
+
+        <PopulationFilter
+          value={populationSort}
+          onChange={setPopulationSort}
+        />
+
+      </div>
+
+      <CountryList
+        countries={filteredCountries}
+        favorites={favorites}
+        toggleFavorite={toggleFavorite}
+      />
 
     </div>
   )
