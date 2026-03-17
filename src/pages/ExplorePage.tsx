@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import type { Country } from "../types/country"
-import { getAllCountries } from "../services/countriesApi"
+import  { getAllCountries } from "../services/countriesApi"
 import { CountryList } from "../components/Container/CountryList/CountryList"
 import { SearchBar } from "../components/SearchBar/SearchBar"
 import { RegionFilter } from "../components/RegionFilter/RegionFilter"
@@ -15,10 +15,10 @@ export function ExplorePage({ favorites, toggleFavorite }: Props) {
   const [countries, setCountries] = useState<Country[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [searchQuery, setSearchQuery] = useState("")
-  const [debouncedQuery, setDebouncedQuery] = useState("")
-  const [region, setRegion] = useState("")
-  const [populationSort, setPopulationSort] = useState("")
+  const [searchQuery, setSearchQuery] = useState<string>("")
+  const [debouncedQuery, setDebouncedQuery] = useState<string>("")
+  const [region, setRegion] = useState<string>("")
+  const [populationSort, setPopulationSort] = useState<string>("")
 
   useEffect(() => {
     async function loadCountries() {

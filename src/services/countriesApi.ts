@@ -15,7 +15,7 @@ export async function getAllCountries(): Promise<Country[]> {
     const data: Country[] = await response.json()
 
     return data
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Error fetching countries:", error)
     throw error
   }
@@ -36,7 +36,7 @@ export async function getCountryByName(name: string): Promise<Country[]> {
     const data: Country[] = await response.json()
 
     return data
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Error fetching country:", error)
     throw error
   }
