@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 
 import { Layout } from "./components/Layout/Layout"
 
@@ -11,7 +11,14 @@ import { CountryPage } from "./pages/CountryPage"
 
 function App() {
 
-  const [favorites, setFavorites] = useState<string[]>([])
+  const [favorites, setFavorites] = useState<string[]>(() => {
+  const saved = localStorage.getItem("favorites")
+  return saved ? JSON.parse(saved) : []
+})
+
+useEffect(() => {
+  localStorage.setItem("favorites", JSON.stringify(favorites))
+}, [favorites])
 
   function toggleFavorite(name: string) {
     setFavorites((prev) => {
@@ -41,10 +48,15 @@ function App() {
             }
           />
 
-          <Route
-            path="/country/:name"
-            element={<CountryPage />}
-          />
+          <Route 
+  path="/country/:name" 
+  element={
+    <CountryPage 
+      favorites={favorites} 
+      toggleFavorite={toggleFavorite} 
+    />
+  } 
+/>
 
           <Route
             path="/favorites"
