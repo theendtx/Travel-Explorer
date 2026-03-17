@@ -49,6 +49,18 @@ useEffect(() => {
   setTrips((prev) => [...prev, newTrip])
 }
 
+  function deleteTrip(id: string) {
+  setTrips((prev) => prev.filter((t) => t.id !== id))
+}
+
+ function updateTrip(updatedTrip: Trip) {
+  setTrips((prev) =>
+    prev.map((trip) =>
+      trip.id === updatedTrip.id ? updatedTrip : trip
+    )
+  )
+} 
+
   return (
     <BrowserRouter>
       <Routes>
@@ -93,6 +105,8 @@ useEffect(() => {
     <TripsPage
       trips={trips}
       addTrip={addTrip}
+      deleteTrip={deleteTrip}
+      updateTrip={updateTrip}
     />
   }
 />
