@@ -9,7 +9,17 @@ import { FavoritesPage } from "./pages/FavoritesPage"
 import { TripsPage } from "./pages/TripsPage"
 import { CountryPage } from "./pages/CountryPage"
 
+import type { Trip } from "./types/trip"
+
 function App() {
+  const [trips, setTrips] = useState<Trip[]>(() => {
+  const saved = localStorage.getItem("trips")
+  return saved ? JSON.parse(saved) : []
+})
+
+useEffect(() => {
+  localStorage.setItem("trips", JSON.stringify(trips))
+}, [trips])
 
   const [favorites, setFavorites] = useState<string[]>(() => {
   const saved = localStorage.getItem("favorites")
@@ -29,6 +39,15 @@ useEffect(() => {
       return [...prev, name]
     })
   }
+
+  function addTrip(trip: Omit<Trip, "id">) {
+  const newTrip: Trip = {
+    id: Date.now().toString(),
+    ...trip
+  }
+
+  setTrips((prev) => [...prev, newTrip])
+}
 
   return (
     <BrowserRouter>
@@ -68,8 +87,15 @@ useEffect(() => {
             }
           />
 
-          <Route path="/trips" element={<TripsPage />} />
-
+          <Route
+  path="/trips"
+  element={
+    <TripsPage
+      trips={trips}
+      addTrip={addTrip}
+    />
+  }
+/>
         </Route>
 
       </Routes>
